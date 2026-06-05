@@ -1,63 +1,116 @@
- # Loads default set of integrations. Do not remove.
- default_config:
- 
- # Load frontend themes from the themes folder
- frontend:
-   themes: !include_dir_merge_named themes
- 
- template:
-   - sensor:
-       - name: "Elektricitet Import Pris per kWh"
-         unique_id: electricity_import_price_per_kwh
-         unit_of_measurement: "DKK/kWh"
-         state: >
-           {% set price = states('sensor.nordpool_kwh_dk1_dkk_3_10_0') | float(0) / 1.25 %}
-           {% set energinetTarif = 0.14 %}
-           {% set elafgift = 0.01 %}
-           {% set norlysTillæg = 0.024 %}
-           {% set gridfee = 0.3295 %}
-           {% if now().hour < 6 %}
-             {% set gridfee = 0.1098 %}
-           {% elif now().hour >= 17 and now().hour < 21 %}
-             {% set gridfee = 0.9884 %}
-           {% endif %}
-           {% if now().month >= 4 and now().month <= 9 %}
-             {% set gridfee = 0.1647 %}
-             {% if now().hour < 6 %}
-               {% set gridfee = 0.1098 %}
-             {% elif now().hour >= 17 and now().hour < 21 %}
-               {% set gridfee = 0.4283 %}
-             {% endif %}
-           {% endif %}
-           {{ ((price + energinetTarif + elafgift + norlysTillæg + gridfee) * 1.25) | round(4) }}
- 
-       - name: "Elektricitet Eksport Pris per kWh"
-         unique_id: electricity_export_price_per_kwh
-         unit_of_measurement: "DKK/kWh"
-         state: >
-           {% set spotpris = states('sensor.nordpool_kwh_dk1_dkk_3_10_0') | float(0) / 1.25 %}
-           {% set eintarif = 0.005 %}
-           {% set ebtarif = 0.0065 %}
-           {% set nintarif = 0.0139 %}
-           {% set vbtarif = 0.01 %}
-           {{ (spotpris - eintarif - ebtarif - nintarif - vbtarif) | round(4) }}
- 
-       - name: "Elektricitet Total Import Omkostning"
-         unique_id: electricity_total_import_cost
-         unit_of_measurement: "DKK"
-         state: >
-           {% set price_per_kwh = states('sensor.elektricitet_import_pris_per_kwh') | float(0) %}
-           {% set imported = states('sensor.sma_metering_total_absorbed') | float(0) %}
-           {{ (price_per_kwh * imported) | round(2) }}
- 
-       - name: "Elektricitet Total Eksport Indtægt"
-         unique_id: electricity_total_export_revenue
-         unit_of_measurement: "DKK"
-         state: >
-           {% set price_per_kwh = states('sensor.elektricitet_eksport_pris_per_kwh') | float(0) %}
-           {% set exported = states('sensor.sma_metering_total_yield') | float(0) %}
-           {{ (price_per_kwh * exported) | round(2) }}
- 
- automation: !include automations.yaml
- script: !include scripts.yaml
- scene: !include scenes.yaml
+# Loads default set of integrations. Do not remove.
+default_config:
+
+# Load frontend themes from the themes folder
+frontend:
+  themes: !include_dir_merge_named themes
+
+template:
+  - sensor:
+      - name: "Nordpool Pris"
+        unique_id: nordpool_price
+        unit_of_measurement: "øre/kWh"
+        state: >
+          {{ states('sensor.nordpool_kwh_dk1_dkk_3_10_025') | float(0) | round(4) }}
+
+      - name: "Elektricitet Import Pris per kWh"
+        unique_id: electricity_import_price_per_kwh
+        unit_of_measurement: "øre/kWh"
+        state: >
+          {% set price = states('sensor.nordpool_kwh_dk1_dkk_3_10_025') | float(0) / 1.25 %}
+          {# Alle tariffer og afgifter er givet i øre/kWh #}
+          {% set energinetTarif = 14 %}
+          {% set elafgift = 1 %}
+          {% set norlysTillæg = 9.27 %}
+          {% set gridfee = 32.95 %}
+          {% if now().hour < 6 %}
+            {% set gridfee = 10.98 %}
+          {% elif now().hour >= 17 and now().hour < 21 %}
+            {% set gridfee = 98.84 %}
+          {% endif %}
+          {% if now().month >= 4 and now().month <= 9 %}
+            {% set gridfee = 16.47 %}
+            {% if now().hour < 6 %}
+              {% set gridfee = 10.98 %}
+            {% elif now().hour >= 17 and now().hour < 21 %}
+              {% set gridfee = 42.83 %}
+            {% endif %}
+          {% endif %}
+          {{ ((price + energinetTarif + elafgift + norlysTillæg + gridfee) * 1.25) | round(4) }}
+
+      - name: "Elektricitet Eksport Pris per kWh"
+        unique_id: electricity_export_price_per_kwh
+        unit_of_measurement: "øre/kWh"
+        state: >
+          {% set spotpris = states('sensor.nordpool_kwh_dk1_dkk_3_10_025') | float(0) / 1.25 %}
+          {# Alle tariffer er givet i øre/kWh #}
+          {% set eintarif = 0.5 %}
+          {% set ebtarif = 0.65 %}
+          {% set nintarif = 1.39 %}
+          {% set vbtarif = 1 %}
+          {{ (spotpris - eintarif - ebtarif - nintarif - vbtarif) | round(4) }}
+
+      - name: "Elektricitet Total Import Omkostning"
+        unique_id: electricity_total_import_cost
+        unit_of_measurement: "DKK"
+        state: >
+          {% set price_per_kwh = states('sensor.elektricitet_import_pris_per_kwh') | float(0) %}
+          {% set imported = states('sensor.sma_metering_total_absorbed') | float(0) %}
+          {{ (price_per_kwh * imported / 100) | round(2) }}
+
+      - name: "Elektricitet Total Eksport Indtægt"
+        unique_id: electricity_total_export_revenue
+        unit_of_measurement: "DKK"
+        state: >
+          {% set price_per_kwh = states('sensor.elektricitet_eksport_pris_per_kwh') | float(0) %}
+          {% set exported = states('sensor.sma_metering_total_yield') | float(0) %}
+          {{ (price_per_kwh * exported / 100) | round(2) }}
+
+      - name: "Elektricitet Månedlig Gennemsnitspris Import"
+        unique_id: electricity_monthly_average_import_price
+        unit_of_measurement: "øre/kWh"
+        state: >
+          {% set monthly_cost = states('sensor.elektricitet_import_omkostning_maaned') | float(0) %}
+          {% set monthly_consumption = states('sensor.elektricitet_total_forbrugsmængde_maaned') | float(0) %}
+          {% if monthly_consumption > 0 %}
+            {{ ((monthly_cost * 100) / monthly_consumption) | round(2) }}
+          {% else %}
+            0
+          {% endif %}
+
+      - name: "Elektricitet Månedlig Gennemsnitspris Eksport"
+        unique_id: electricity_monthly_average_export_price
+        unit_of_measurement: "øre/kWh"
+        state: >
+          {% set monthly_revenue = states('sensor.elektricitet_eksport_indtagt_maaned') | float(0) %}
+          {% set monthly_exported = states('sensor.elektricitet_total_eksportmængde_maaned') | float(0) %}
+          {% if monthly_exported > 0 %}
+            {{ ((monthly_revenue * 100) / monthly_exported) | round(2) }}
+          {% else %}
+            0
+          {% endif %}
+
+utility_meter:
+  elektricitet_total_forbrugsmængde_maaned:
+    source: sensor.sma_metering_total_absorbed
+    cycle: monthly
+    name: "Elektricitet Total Forbrugsmængde Måned"
+
+  elektricitet_total_eksportmængde_maaned:
+    source: sensor.sma_metering_total_yield
+    cycle: monthly
+    name: "Elektricitet Total Eksportmængde Måned"
+
+  elektricitet_import_omkostning_maaned:
+    source: sensor.elektricitet_total_import_omkostning
+    cycle: monthly
+    name: "Elektricitet Total Import Omkostning Måned"
+
+  elektricitet_eksport_indtagt_maaned:
+    source: sensor.elektricitet_total_eksport_indtaegt
+    cycle: monthly
+    name: "Elektricitet Total Eksport Indtægt Måned"
+
+automation: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml
