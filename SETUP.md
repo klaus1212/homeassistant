@@ -7,6 +7,7 @@
 - **SSH:** ehman@ds218play
 
 ## Inverter (SMA)
+- **Lattitude, Longitude:** 54.91838390036865, 9.886179598483615
 - **Type:** SMA Home Manager 2
   - **IP:** 192.168.68.66
 - **Inverter** SMA hybrid inverter STP8.0-3SE-40
