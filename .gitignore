@@ -1,0 +1,12 @@
+*.log*
+*.pid
+*.lock
+*.HA_VERSION
+*.fault
+*.db*
+.cloud/
+.storage/
+blueprints/
+custom_components/
+deps/
+tts/
