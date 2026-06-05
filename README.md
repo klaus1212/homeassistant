@@ -5,10 +5,16 @@ Tips and tricks
 	restart package [homeassistant] successfully
 
 - Git from powershell
-	git status to list files that are modified
-	git add to add files to be committed
-	git commit -m "Added foo to the bar"
-	git push
+	Add and commit
+		git status to list files that are modified
+		git add to add files to be committed
+		git commit -m "Added foo to the bar"
+		git push
+    Merge 
+		
+	
+	Squash
+		cd "\\ds218play\homeassistant_config" && git branch -d feature/correct_pricing && git push origin --delete feature/correct_pricing
 
 Todo list
 - feature/correct_pricing
