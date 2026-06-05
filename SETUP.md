@@ -7,8 +7,12 @@
 - **SSH:** ehman@ds218play
 
 ## Inverter (SMA)
-- **Type:** SMA Home Manager
-- **IP:** 192.168.68.64
+- **Type:** SMA Home Manager 2
+  - **IP:** 192.168.68.66
+- **Inverter** SMA hybrid inverter STP8.0-3SE-40
+  - **IP:** 192.168.68.64
+  - **Nominal PV power:** 12kwp
+  - **Nominal battery capacity:** 12.8kwh
 - **Key Sensors:** 
   - Metering Total Yield (export)
   - Metering Total Absorbed (import)
