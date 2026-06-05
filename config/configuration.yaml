@@ -42,6 +42,7 @@ template:
         unique_id: electricity_export_price_per_kwh
         unit_of_measurement: "øre/kWh"
         state: >
+          {#  Fjern moms fra rå spotpris. Som privatperson får du spotprisen UDEN moms #}
           {% set spotpris = states('sensor.nordpool_kwh_dk1_dkk_3_10_025') | float(0) / 1.25 %}
           {# Alle tariffer er givet i øre/kWh #}
           {% set eintarif = 0.5 %}
