@@ -12,7 +12,13 @@
 - **Inverter** SMA hybrid inverter STP8.0-3SE-40
   - **IP:** 192.168.68.64
   - **Nominal PV power:** 12kwp
+- **Battery:**
   - **Nominal battery capacity:** 12.8kwh
+  - **Min SOC:** 25%
+  - **Max SOC:** 100%
+  - **Max charge capacity:** 10600w	
+  - **Max discharge capacity:** 10600w
+  - **BMS type:** Battery-Box Premium HVS	
 - **Key Sensors:** 
   - Metering Total Yield (export)
   - Metering Total Absorbed (import)
