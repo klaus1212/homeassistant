@@ -44,7 +44,7 @@ template:
         state: >
           {#  Fjern moms fra rå spotpris. Som privatperson får du spotprisen UDEN moms #}
           {% set spotpris = states('sensor.nordpool_kwh_dk1_dkk_3_10_025') | float(0) / 1.25 %}
-          {# Alle tariffer er givet i øre/kWh #}
+          {# Alle tarifferer givet i øre/kWh #}
           {% set eintarif = 0.5 %}
           {% set ebtarif = 0.65 %}
           {% set nintarif = 1.39 %}
@@ -72,7 +72,7 @@ template:
         unit_of_measurement: "øre/kWh"
         state: >
           {% set monthly_cost = states('sensor.elektricitet_import_omkostning_maaned') | float(0) %}
-          {% set monthly_consumption = states('sensor.elektricitet_total_forbrugsmængde_maaned') | float(0) %}
+          {% set monthly_consumption = states('sensor.elektricitet_total_forbrugsmaengde_maaned') | float(0) %}
           {% if monthly_consumption > 0 %}
             {{ ((monthly_cost * 100) / monthly_consumption) | round(2) }}
           {% else %}
@@ -84,7 +84,7 @@ template:
         unit_of_measurement: "øre/kWh"
         state: >
           {% set monthly_revenue = states('sensor.elektricitet_eksport_indtagt_maaned') | float(0) %}
-          {% set monthly_exported = states('sensor.elektricitet_total_eksportmængde_maaned') | float(0) %}
+          {% set monthly_exported = states('sensor.elektricitet_total_eksportmaengde_maaned') | float(0) %}
           {% if monthly_exported > 0 %}
             {{ ((monthly_revenue * 100) / monthly_exported) | round(2) }}
           {% else %}
@@ -92,12 +92,12 @@ template:
           {% endif %}
 
 utility_meter:
-  elektricitet_total_forbrugsmængde_maaned:
+  elektricitet_total_forbrugsmaengde_maaned:
     source: sensor.sma_metering_total_absorbed
     cycle: monthly
     name: "Elektricitet Total Forbrugsmængde Måned"
 
-  elektricitet_total_eksportmængde_maaned:
+  elektricitet_total_eksportmaengde_maaned:
     source: sensor.sma_metering_total_yield
     cycle: monthly
     name: "Elektricitet Total Eksportmængde Måned"
@@ -108,7 +108,7 @@ utility_meter:
     name: "Elektricitet Total Import Omkostning Måned"
 
   elektricitet_eksport_indtagt_maaned:
-    source: sensor.elektricitet_total_eksport_indtaegt
+    source: sensor.elektricitet_total_export_revenue
     cycle: monthly
     name: "Elektricitet Total Eksport Indtægt Måned"
 
