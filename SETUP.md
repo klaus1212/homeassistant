@@ -1,5 +1,7 @@
 # Home Assistant Setup
 
+Encryptionkey: TKQC-88N0-70JY-45B8-2P9O-XK08-P4XN
+
 ## System Info
 - **Device:** Synology DS218play
 - **HA Version:** 2025.11.3-25 (SynoCommunity package)
@@ -67,6 +69,11 @@
 - Elektricitet Eksport Indtægt Måned
 - Elektricitet Total Forbrugsmængde Måned
 - Elektricitet Total Eksportmængde Måned
+
+## Wheather forcast
+- **Solcast:** https://solcast.com/
+- **API key:** KClAHiTaL7XK4wqfeLUHghVsCOCsYDzl
+
 
 ## Additional Notes
 *To be filled in...*

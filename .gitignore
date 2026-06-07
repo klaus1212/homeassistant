@@ -4,6 +4,8 @@
 *.HA_VERSION
 *.fault
 *.db*
+*.tar
+*.js*
 .cloud/
 .storage/
 blueprints/

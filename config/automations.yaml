@@ -1,1 +1,26 @@
-[]
+- id: '1780682918172'
+  alias: 'Solcast: Controlled API Updates (Interval + Sunset Capture)'
+  description: Updates Solcast every 3 hours during daylight, plus a final run 10
+    minutes before sunset.
+  triggers:
+  - hours: /3
+    id: interval_trigger
+    trigger: time_pattern
+  - event: sunset
+    offset: -00:10:00
+    id: sunset_trigger
+    trigger: sun
+  conditions:
+  - condition: or
+    conditions:
+    - condition: trigger
+      id: sunset_trigger
+    - condition: and
+      conditions:
+      - condition: sun
+        after: sunrise
+      - condition: sun
+        before: sunset
+  actions:
+  - action: solcast.update_forecast
+    data: {}

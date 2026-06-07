@@ -8,6 +8,14 @@ This repository contains my Home Assistant configuration for energy monitoring a
 
 ## Tips and tricks
 
+- Gemini
+  Run PowerShell som Administrator
+  New-Item -ItemType SymbolicLink -Path "C:\temp\homeassistant_config" -Value "\\ds218play\homeassistant_config"
+  cd c:\temp\"new folder"
+  Gemini
+  trust c:\temp\
+  tell it about c:\temp\homeassistant_config
+
 - From powershell ssh to synology
   ```
   ehman@ds218play:/usr$ sudo /usr/syno/bin/synopkg restart homeassistant
@@ -28,6 +36,9 @@ This repository contains my Home Assistant configuration for energy monitoring a
     ```
     cd "\\ds218play\homeassistant_config" && git branch -d feature/correct_pricing && git push origin --delete feature/correct_pricing
     ```
+
+- Default Oversigt YAML
+	type: original-states
 
 ## Todo list
 - [done] feature/correct_pricing - get correct import (you buy) and correct export (you sell) price
